@@ -1,3 +1,4 @@
+#  todo_bp
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -13,6 +14,7 @@ import base64
 from datetime import datetime
 import atexit
 import traceback
+from . import todo_bp
 
 # Configure logging
 logging.basicConfig(
@@ -276,7 +278,7 @@ def validate_numeric(value, field_name):
         raise ValueError(f"Invalid value for {field_name}: {value}")
 
 # New endpoint to fetch record by ID for dynamic update
-@app.route('/get_record/<int:id>', methods=['GET'])
+@todo_bp.route('/get_record/<int:id>', methods=['GET'])
 def get_record(id):
     try:
         conn = get_db_connection()
@@ -294,7 +296,7 @@ def get_record(id):
         return jsonify({"error": "Internal server error"}), 500
 
 # Index route with keyset pagination and search
-@app.route('/', methods=['GET', 'POST'])
+@todo_bp.route('/', methods=['GET', 'POST'])
 def index():
     try:
         if 'user_id' not in session:
@@ -469,7 +471,7 @@ def index():
         return redirect(url_for('login'))
 
 # Admin route
-@app.route('/admin', methods=['GET', 'POST'])
+@todo_bp.route('/admin', methods=['GET', 'POST'])
 def admin():
     try:
         if 'user_id' not in session or not session.get('is_admin'):
@@ -701,7 +703,7 @@ def admin():
         return redirect(url_for('index'))
 
 # Login route
-@app.route('/login', methods=['GET', 'POST'])
+@todo_bp.route('/login', methods=['GET', 'POST'])
 def login():
     try:
         if request.method == 'POST':
@@ -731,7 +733,7 @@ def login():
         return redirect(url_for('login'))
 
 # Register route
-@app.route('/register', methods=['GET', 'POST'])
+@todo_bp.route('/register', methods=['GET', 'POST'])
 def register():
     try:
         if request.method == 'POST':
@@ -769,7 +771,7 @@ def register():
         return redirect(url_for('login'))
 
 # Recover route
-@app.route('/recover', methods=['GET', 'POST'])
+@todo_bp.route('/recover', methods=['GET', 'POST'])
 def recover():
     try:
         if request.method == 'POST':
@@ -800,7 +802,7 @@ def recover():
         return redirect(url_for('login'))
 
 # Logout route
-@app.route('/logout')
+@todo_bp.route('/logout')
 def logout():
     try:
         username = session.get('username')
@@ -816,7 +818,7 @@ def logout():
         return redirect(url_for('login'))
 
 # Search route
-@app.route('/search', methods=['GET', 'POST'])
+@todo_bp.route('/search', methods=['GET', 'POST'])
 def search():
     try:
         if 'user_id' not in session:
@@ -850,6 +852,4 @@ def cleanup():
 # Initialize database on app startup
 init_db()
 
-
 atexit.register(cleanup)
-

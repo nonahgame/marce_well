@@ -37,6 +37,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "your-secret-key")
 
 # Environment variables
+Application = Bot
 BOT_TOKEN = os.getenv("BOT_TOKEN2", "your-telegram-bot-token")
 CHAT_ID = os.getenv("CHAT_ID", "your-telegram-chat-id")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "GITHUB_TOKEN")
@@ -851,3 +852,4 @@ init_db()
 
 
 atexit.register(cleanup)
+

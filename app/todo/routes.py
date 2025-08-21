@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 import sqlite3
+import telegram
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from telegram.ext import Application  # Correct import for modern python-telegram-bot
+from telegram import Bot  # Correct import for modern python-telegram-bot
 import asyncio
 import logging
 import requests
@@ -847,5 +848,6 @@ def cleanup():
 
 # Initialize database on app startup
 init_db()
+
 
 atexit.register(cleanup)

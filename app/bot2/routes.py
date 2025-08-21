@@ -1,4 +1,4 @@
-# app.py btc pt 4000 & fd
+# app.py btc pt 5000 bot2
 import os
 import pandas as pd
 import numpy as np
@@ -17,6 +17,7 @@ import base64
 from flask import Flask, render_template, jsonify
 import atexit
 import asyncio
+from . import bot2_bp
 
 # Custom formatter for EU timezone (UTC)
 class EUFormatter(logging.Formatter):
@@ -1008,7 +1009,7 @@ Total Return Profit: {total_return_profit_db:.2f}
             conn = None
             return f"Error fetching trade counts: {str(e)}"
 
-@app.route('/')
+@bot2_bp.route('/')
 def index():
     global conn, stop_time
     status = "active" if bot_active else "stopped"
@@ -1041,17 +1042,17 @@ def index():
             conn = None
             return "<h1>Error</h1><p>Failed to load page. Please try again later.</p>", 500
 
-@app.route('/status')
+@bot2_bp.route('/status')
 def status():
     status = "active" if bot_active else "stopped"
     stop_time_str = stop_time.strftime("%Y-%m-%d %H:%M:%S") if stop_time else "N/A"
     return jsonify({"status": status, "timeframe": TIMEFRAME, "stop_time": stop_time_str})
 
-@app.route('/performance')
+@bot2_bp.route('/performance')
 def performance():
     return jsonify({"performance": get_performance()})
 
-@app.route('/trades')
+@bot2_bp.route('/trades')
 def trades():
     global conn
     start_time = time.time()
@@ -1081,5 +1082,6 @@ def cleanup():
         logger.info("Database connection closed")
         upload_to_github(db_path, 'rnn_bot.db')
         logger.info("Final database backup to GitHub completed")
+
 
 atexit.register(cleanup)

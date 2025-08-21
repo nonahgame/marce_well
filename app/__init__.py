@@ -12,6 +12,8 @@ def create_app():
     app.register_blueprint(bot1_bp, url_prefix='/bot1')
     app.register_blueprint(todo_bp, url_prefix='/todo')
     app.register_blueprint(bot2_bp, url_prefix='/bot2')
+
+    return app
 """
     # Add a root route to avoid 404 on /
     @app.route('/')
@@ -21,4 +23,4 @@ def create_app():
             "available_routes": ["/bot1", "/todo", "/bot2"]
         })
 """
-    return app
+    #return app

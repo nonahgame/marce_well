@@ -18,6 +18,7 @@ from flask import Flask, render_template, jsonify
 import atexit
 import base64
 import json
+from . import bot1_bp
 #load_dotenv()
 # Configure logging
 logging.basicConfig(
@@ -797,7 +798,7 @@ Total Profit: {total_profit_db:.2f}
         return f"Error fetching trade counts: {str(e)}"
 
 # Flask routes
-@app.route('/')
+@bot1_bp.route('/')
 def index():
     global latest_signal, stop_time
     status = "active" if bot_active else "stopped"
@@ -825,16 +826,16 @@ def index():
         logger.error(f"Error rendering index.html: {e}")
         return jsonify({"error": "Failed to render template"}), 500
 
-@app.route('/status')
+@bot1_bp.route('/status')
 def status():
     status = "active" if bot_active else "stopped"
     return jsonify({"status": status, "timeframe": TIMEFRAME, "stop_time": stop_time.strftime("%Y-%m-%d %H:%M:%S")})
 
-@app.route('/performance')
+@bot1_bp.route('/performance')
 def performance():
     return jsonify({"performance": get_performance()})
 
-@app.route('/trades')
+@bot1_bp.route('/trades')
 def trades():
     try:
         if conn is None:
@@ -857,4 +858,3 @@ def cleanup():
 
 
 atexit.register(cleanup)
-
